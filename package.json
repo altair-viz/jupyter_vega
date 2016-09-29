@@ -1,0 +1,32 @@
+{
+  "private": true,
+  "name": "jupyterlab_vega",
+  "version": "0.1.0",
+  "description": "A JupyterLab extension for rendering GeoJSON data.",
+  "author": "Brian E. Granger / Jake VanderPlas",
+  "main": "lib/plugin.js",
+  "keywords": [
+    "jupyter",
+    "jupyterlab"
+  ],
+  "scripts": {
+    "build:src": "tsc --project src && node scripts/copyfiles.js",
+    "build:extension": "node scripts/build_extension.js",
+    "build": "npm run build:src && npm run build:extension",
+    "clean": "rimraf lib && rimraf jupyterlab_vega/static",
+    "prepublish": "npm run build"
+  },
+  "dependencies": {
+    "jupyterlab": "^0.3.0",
+    "vega-embed": "^2.2.0",
+    "vega": "^2.6.1",
+    "vega-lite": "^1.1.3",
+    "d3": "3.5.17"
+  },
+  "devDependencies": {
+    "fs-extra": "^0.30.0",
+    "rimraf": "^2.5.4",
+    "jupyterlab-extension-builder": "^0.6.2",
+    "typescript": "^2.0.3"
+  }
+}
