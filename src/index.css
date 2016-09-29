@@ -1,8 +1,14 @@
 
+
 .jp-RenderedVegaCommon svg, .jp-RenderedVegaCommon canvas {
-  border: 1px dotted red;
 }
 
+
+.jp-RenderedVegaCommon .vega-actions {
+  font-size: var(--jp-ui-font-size1);
+}
+
+
 .jp-RenderedVegaCommon .vega-actions a {
-  margin-right: 6px;
+  margin-right: 8px;
 }
