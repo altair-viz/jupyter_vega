@@ -21,21 +21,22 @@ import {
   VegaLiteRenderer, VegaRenderer
 } from './renderer';
 
+import './index.css';
+
 /**
  * The list of file extensions for vega and vegalite.
  */
 const VEGA_EXTENSIONS = ['.vg', 'vg.json', '.json'];
 const VEGALITE_EXTENSIONS = ['.vl', 'vl.json', '.json'];
 
-
-
-export
-const vegaHandlerExtension: JupyterLabPlugin<void> = {
+const vegaPlugin: JupyterLabPlugin<void> = {
   id: 'jupyter.extensions.vega',
   requires: [IDocumentRegistry, IRenderMime],
   activate: activateVegaPlugin,
   autoStart: true
 };
+
+export default vegaPlugin;
 
 
 /**

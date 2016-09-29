@@ -10,6 +10,7 @@ import {
   IDocumentModel, IDocumentContext
 } from 'jupyterlab/lib/docregistry';
 
+import embed = require('vega-embed');
 
 /**
  * The class name added to a Vega widget.
@@ -39,8 +40,8 @@ class BaseVegaWidget extends Widget {
     this._context = context;
     this.node.tabIndex = -1;
     this._vegaNode = document.createElement('div');
-    this._vegaNode.className = 'vega-embed';
-    this.node.appendChild(this._vegaNode);
+
+    
 
     if (context.model.toString()) {
       this.update();
@@ -77,19 +78,7 @@ class BaseVegaWidget extends Widget {
       return;
     }
     let content = this._context.model.toString();
-    this.renderVega(content);
-  }
-
-  /**
-   * Render an html table from a csv string.
-   */
-  renderVega(content: string) {
-    let embedSpec = {
-      mode: this._vegaEmbedMode,
-      source: content
-    };
-
-    embed(this._vegaNode, embedSpec, function(error: any, result: any): any {});
+    
   }
 
   private _context: IDocumentContext<IDocumentModel>;
