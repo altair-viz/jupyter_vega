@@ -10,8 +10,6 @@ import {
   IDocumentModel, IDocumentContext
 } from 'jupyterlab/lib/docregistry';
 
-import embed = require('vega-embed');
-
 
 /**
  * The class name added to a Vega widget.

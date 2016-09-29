@@ -10,14 +10,14 @@
     "jupyterlab"
   ],
   "scripts": {
+    "clean": "rimraf lib && rimraf jupyterlab_vega/static",
     "build:src": "tsc --project src && node scripts/copyfiles.js",
     "build:extension": "node scripts/build_extension.js",
     "build": "npm run build:src && npm run build:extension",
-    "clean": "rimraf lib && rimraf jupyterlab_vega/static",
-    "prepublish": "npm run build"
+    "prepublish": ""
   },
   "dependencies": {
-    "jupyterlab": "^0.3.0",
+    "jupyterlab": "^0.4.1",
     "vega-embed": "^2.2.0",
     "vega": "^2.6.1",
     "vega-lite": "^1.1.3",

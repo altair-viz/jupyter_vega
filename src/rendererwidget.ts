@@ -16,7 +16,6 @@ import {
 
 import embed = require('vega-embed');
 
-
 const VEGA_COMMON = 'jp-RenderedVegaCommon';
 
 const VEGA_CLASS = 'jp-RenderedVega';
@@ -56,6 +55,7 @@ class RenderedVegaBase extends Widget {
   }
 
   private _source: JSONObject = null;
+  private _injector: (mimetype: string, value: string | JSONObject) => void
 
 }
 

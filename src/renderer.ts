@@ -4,6 +4,10 @@ import {
 } from 'phosphor/lib/ui/widget';
 
 import {
+  JSONObject
+} from 'phosphor/lib/algorithm/json';
+
+import {
   RenderMime
 } from 'jupyterlab/lib/rendermime';
 
@@ -36,7 +40,7 @@ class VegaRenderer implements RenderMime.IRenderer {
   /**
    * Render the transformed mime bundle.
    */
-  render(options: RenderMime.IRendererOptions<string>): Widget {
+  render(options: RenderMime.IRendererOptions<JSONObject>): Widget {
     return new RenderedVega(options);
   }
 }
@@ -66,7 +70,7 @@ class VegaLiteRenderer implements RenderMime.IRenderer {
   /**
    * Render the transformed mime bundle.
    */
-  render(options: RenderMime.IRendererOptions<string>): Widget {
+  render(options: RenderMime.IRendererOptions<JSONObject>): Widget {
     return new RenderedVegaLite(options);
   }
 }
