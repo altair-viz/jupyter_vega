@@ -15,6 +15,10 @@ import {
 } from 'phosphor/lib/ui/panel';
 
 import {
+  ActivityMonitor
+} from 'jupyterlab/lib/common/activitymonitor';
+
+import {
   IDocumentModel, IDocumentContext
 } from 'jupyterlab/lib/docregistry';
 
@@ -42,6 +46,8 @@ const VEGA_CLASS = 'jp-VegaWidget';
  */
 const VEGALITE_CLASS = 'jp-VegaLiteWidget';
 
+const RENDER_TIMEOUT = 1000;
+
 
 export
 class BaseVegaWidget extends Panel {
@@ -58,9 +64,11 @@ class BaseVegaWidget extends Panel {
     context.pathChanged.connect(() => {
       this.renderTitle();
     });
-    context.model.contentChanged.connect(() => {
-      this.renderVega();
+    this._monitor = new ActivityMonitor({
+      signal: context.model.contentChanged,
+      timeout: RENDER_TIMEOUT
     });
+    this._monitor.activityStopped.connect(() => { this.renderVega(); });
     context.contentsModelChanged.connect(() => {
       this.renderVega();
     });
@@ -74,6 +82,7 @@ class BaseVegaWidget extends Panel {
       return;
     }
     this._context = null;
+    this._monitor.dispose();
     super.dispose();
   }
 
@@ -118,6 +127,7 @@ class BaseVegaWidget extends Panel {
   private _updateTitle = false;
   private _updateVega = false;
   private _context: IDocumentContext<IDocumentModel>;
+  private _monitor: ActivityMonitor<any, any> = null;
 }
 
 
