@@ -22,6 +22,10 @@ const VEGA_CLASS = 'jp-RenderedVega';
 
 const VEGALITE_CLASS = 'jp-RenderedVegaLite';
 
+const DEFAULT_WIDTH = 400;
+
+const DEFAULT_HEIGHT = 400/1.5;
+
 
 /**
  * A widget for displaying HTML and rendering math.
@@ -44,7 +48,15 @@ class RenderedVegaBase extends Widget {
 
   private _renderVega(): void {
 
-    let spec = this._source;
+    let spec = this._source as any;
+
+    if (this._vegaEmbedMode==="vega-lite") {
+      spec['config'] = spec['config'] || {};
+      spec['config']['cell'] = spec['config']['cell'] || {};
+      spec['config']['cell']['width'] = spec['config']['cell']['width'] || DEFAULT_WIDTH;
+      spec['config']['cell']['height'] = spec['config']['cell']['height'] || DEFAULT_HEIGHT;
+    }
+
     let embedSpec = {
       mode: this._vegaEmbedMode,
       spec: spec
