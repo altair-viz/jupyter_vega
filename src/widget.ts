@@ -92,10 +92,8 @@ class BaseVegaWidget extends Panel {
       }
       let layout = this.layout as PanelLayout;
       let sdata = context.model.toString();
-      console.log(sdata);
       let options = {mimetype: this.mimetype,
                     source: JSON.parse(sdata)}
-      console.log(options);
       let widget = new RenderedVegaLite(options);
       if (layout.widgets.length) {
         layout.widgets.at(0).dispose();
