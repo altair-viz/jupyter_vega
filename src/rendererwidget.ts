@@ -22,10 +22,6 @@ const VEGA_CLASS = 'jp-RenderedVega';
 
 const VEGALITE_CLASS = 'jp-RenderedVegaLite';
 
-const DEFAULT_WIDTH = 500;
-
-const DEFAULT_HEIGHT = 350;
-
 
 /**
  * A widget for displaying HTML and rendering math.
@@ -41,7 +37,6 @@ class RenderedVegaBase extends Widget {
   }
 
   onAfterAttach(msg: Message): void {
-    console.log('Attached...')
     this._renderVega();
   }
 
@@ -55,7 +50,6 @@ class RenderedVegaBase extends Widget {
       spec: spec
     };
 
-    console.log('Calling embed', embedSpec);
     embed(this.node, embedSpec, (error: any, result: any): any => {
       // This is copied out for now as there is a bug in JupyterLab
       // that triggers and infinite rendering loop when this is done.

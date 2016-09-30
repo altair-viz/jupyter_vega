@@ -27,7 +27,7 @@ class VegaRenderer implements RenderMime.IRenderer {
    * Whether the input can safely sanitized for a given mimetype.
    */
   isSanitizable(mimetype: string): boolean {
-    return false;
+    return this.mimetypes.indexOf(mimetype) !== -1;
   }
 
   /**
@@ -57,7 +57,7 @@ class VegaLiteRenderer implements RenderMime.IRenderer {
    * Whether the input can safely sanitized for a given mimetype.
    */
   isSanitizable(mimetype: string): boolean {
-    return false;
+    return this.mimetypes.indexOf(mimetype) !== -1;
   }
 
   /**

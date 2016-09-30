@@ -1,4 +1,8 @@
 import {
+  JSONObject
+} from 'phosphor/lib/algorithm/json';
+
+import {
   Message
 } from 'phosphor/lib/core/messaging';
 
@@ -7,10 +11,26 @@ import {
 } from 'phosphor/lib/ui/widget';
 
 import {
+  Panel, PanelLayout
+} from 'phosphor/lib/ui/panel';
+
+import {
   IDocumentModel, IDocumentContext
 } from 'jupyterlab/lib/docregistry';
 
+import {
+  RenderMime
+} from 'jupyterlab/lib/rendermime';
+
+import {
+  RenderedVega, RenderedVegaLite
+} from './rendererwidget';
+
+
 import embed = require('vega-embed');
+
+
+const BASE_VEGA_CLASS = 'jp-BaseVegaWidget';
 
 /**
  * The class name added to a Vega widget.
@@ -23,37 +43,26 @@ const VEGA_CLASS = 'jp-VegaWidget';
 const VEGALITE_CLASS = 'jp-VegaLiteWidget';
 
 
-/**
- * A widget for csv tables.
- */
 export
-class BaseVegaWidget extends Widget {
+class BaseVegaWidget extends Panel {
 
-  protected _vegaEmbedMode: string;
-  private _vegaNode: HTMLElement;
-
-  /**
-   * Construct a new csv table widget.
-   */
   constructor(context: IDocumentContext<IDocumentModel>) {
     super();
+    this.addClass(BASE_VEGA_CLASS);
     this._context = context;
-    this.node.tabIndex = -1;
-    this._vegaNode = document.createElement('div');
 
-    
-
-    if (context.model.toString()) {
-      this.update();
+    if (context.model.toJSON()) {
+      this.renderTitle();
+      this.renderVega();
     }
     context.pathChanged.connect(() => {
-      this.update();
+      this.renderTitle();
     });
     context.model.contentChanged.connect(() => {
-      this.update();
+      this.renderVega();
     });
     context.contentsModelChanged.connect(() => {
-      this.update();
+      this.renderVega();
     });
   }
 
@@ -68,19 +77,48 @@ class BaseVegaWidget extends Widget {
     super.dispose();
   }
 
-  /**
-   * Handle `update-request` messages for the widget.
-   */
   protected onUpdateRequest(msg: Message): void {
-    this.title.label = this._context.path.split('/').pop();
-    let cm = this._context.contentsModel;
-    if (cm === null) {
-      return;
+    let context = this._context;
+
+    if (this._updateTitle) {
+      this.title.label = context.path.split('/').pop();
+      this._updateTitle = false;
     }
-    let content = this._context.model.toString();
-    
+
+    if (this._updateVega) {
+      let cm = context.contentsModel;
+      if (cm === null) {
+        return;
+      }
+      let layout = this.layout as PanelLayout;
+      let sdata = context.model.toString();
+      console.log(sdata);
+      let options = {mimetype: this.mimetype,
+                    source: JSON.parse(sdata)}
+      console.log(options);
+      let widget = new RenderedVegaLite(options);
+      if (layout.widgets.length) {
+        layout.widgets.at(0).dispose();
+      }
+      layout.addWidget(widget);
+      this._updateVega = false;
+    }
   }
 
+  protected mimetype: string;
+
+  protected renderTitle(): void {
+    this._updateTitle = true;
+    this.update();
+  }
+
+  protected renderVega(): void {
+    this._updateVega = true;
+    this.update();
+  }
+
+  private _updateTitle = false;
+  private _updateVega = false;
   private _context: IDocumentContext<IDocumentModel>;
 }
 
@@ -96,7 +134,7 @@ class VegaWidget extends BaseVegaWidget {
   constructor(context: IDocumentContext<IDocumentModel>) {
     super(context);
     this.addClass(VEGA_CLASS);
-    this._vegaEmbedMode = 'vega';
+    this.mimetype = 'application/vnd.vega+json';
   }
 }
 
@@ -112,7 +150,7 @@ class VegaLiteWidget extends BaseVegaWidget {
   constructor(context: IDocumentContext<IDocumentModel>) {
     super(context);
     this.addClass(VEGALITE_CLASS);
-    this._vegaEmbedMode = 'vega-lite';
+    this.mimetype = 'application/vnd.vegalite+json';
   }
 }
 

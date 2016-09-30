@@ -13,9 +13,9 @@ import {
   IRenderMime
 } from 'jupyterlab/lib/rendermime';
 
-// import {
-//   VegaWidgetFactory, VegaLiteWidgetFactory
-// } from './factory';
+import {
+  VegaWidgetFactory, VegaLiteWidgetFactory
+} from './factory';
 
 import {
   VegaLiteRenderer, VegaRenderer
@@ -50,25 +50,26 @@ function activateVegaPlugin(app: JupyterLab,
     rendermime.addRenderer('application/vnd.vega+json', new VegaRenderer(), 0);
     rendermime.addRenderer('application/vnd.vegalite+json', new VegaLiteRenderer(), 0);
 
-    // let options = {
-    //   fileExtensions: VEGA_EXTENSIONS,
-    //   defaultFor: VEGA_EXTENSIONS.slice(0,2),
-    //   displayName: 'Vega',
-    //   modelName: 'text',
-    //   preferKernel: false,
-    //   canStartKernel: false
-    // };
+    // Add file handler for standalone Vega JSON files
+    let options = {
+      fileExtensions: VEGA_EXTENSIONS,
+      defaultFor: VEGA_EXTENSIONS.slice(0,2),
+      displayName: 'Vega',
+      modelName: 'text',
+      preferKernel: false,
+      canStartKernel: false
+    };
+    registry.addWidgetFactory(new VegaWidgetFactory(), options);
 
-    // registry.addWidgetFactory(new VegaWidgetFactory(), options);
+    // Add file handler for standalone VegaLite JSON files
+    options = {
+      fileExtensions: VEGALITE_EXTENSIONS,
+      defaultFor: VEGALITE_EXTENSIONS.slice(0,2),
+      displayName: 'VegaLite',
+      modelName: 'text',
+      preferKernel: false,
+      canStartKernel: false
+    };
 
-    // options = {
-    //   fileExtensions: VEGALITE_EXTENSIONS,
-    //   defaultFor: VEGALITE_EXTENSIONS.slice(0,2),
-    //   displayName: 'VegaLite',
-    //   modelName: 'text',
-    //   preferKernel: false,
-    //   canStartKernel: false
-    // };
-
-    // registry.addWidgetFactory(new VegaLiteWidgetFactory(), options);
+    registry.addWidgetFactory(new VegaLiteWidgetFactory(), options);
 }

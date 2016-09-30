@@ -12,3 +12,10 @@
 .jp-RenderedVegaCommon .vega-actions a {
   margin-right: 8px;
 }
+
+.jp-MirroredOutputArea .jp-RenderedVegaCommon,
+.jp-BaseVegaWidget .jp-RenderedVegaCommon
+ {
+  margin-left: 8px;
+  margin-top: 8px;
+}
