@@ -32,7 +32,7 @@ setup_args = dict(
     author_email         = "ellisonbg@gmail.com / jakevdp@cs.washington.edu",
     include_package_data = True,
     install_requires = [
-        'jupyterlab>=0.3.0',
+        'jupyterlab>=0.4.2',
     ]
 )
 
