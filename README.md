@@ -5,7 +5,7 @@ A JupyterLab extension for rendering Vega and Vega-Lite visualizations.
 
 ## Prerequisites
 
-* JupyterLab 0.3.0 or later
+* JupyterLab 0.4.2 or later
 
 ## Installation
 
@@ -24,8 +24,8 @@ For a development install (requires npm version 4 or later), do the following in
 ```bash
 npm install
 pip install -e .
-jupyter labextension install --symlink --py --sys-prefix jupyterlab_vega
-jupyter labextension enable --py --sys-prefix jupyterlab_vega
+jupyter labextension install --symlink --sys-prefix --py jupyterlab_vega
+jupyter labextension enable --sys-prefix --py jupyterlab_vega
 ```
 
 To rebuild the extension bundle:
