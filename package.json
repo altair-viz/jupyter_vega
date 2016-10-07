@@ -17,7 +17,7 @@
     "prepublish": "npm run build"
   },
   "dependencies": {
-    "jupyterlab": "0.4.1",
+    "jupyterlab": "0.5.0",
     "vega-embed": "^2.2.0",
     "vega": "^2.6.1",
     "vega-lite": "^1.1.3",
