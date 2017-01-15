@@ -1,0 +1,18 @@
+{
+  "name": "jupyterlab_vega_react",
+  "version": "1.0.0",
+  "description": "A React component for rendering Vega",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "jupyter",
+    "react"
+  ],
+  "author": "Grant Nestor <grantnestor@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^15.3.2"
+  }
+}

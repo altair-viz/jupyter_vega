@@ -1,7 +1,3 @@
-# -*- coding: utf-8 -*-
-
-# Copyright (c) Brian Granger and Jake Vanderplas
-
 import os
 import sys
 from distutils.core import setup
@@ -18,7 +14,7 @@ if 'develop' in sys.argv or any(a.startswith('bdist') for a in sys.argv):
 # Ensure that js has been built. This does not guaruntee that the packages
 # are update to date. In the future we might do a more expensive check
 # involving file hashes, but only on sdist and bdist builds.
-if not os.path.exists('node_modules'):
+if not os.path.exists('labextension/node_modules') and not os.path.exists('nbextension/node_modules'):
     raise NodeModulesMissing("Before Python package can be installed or built, "
                              "JavaScript components must be built using npm. "
                              "Run the following and then retry: "
@@ -28,11 +24,13 @@ setup_args = dict(
     name                 = 'jupyterlab_vega',
     version              = '0.1.0',
     packages             = ['jupyterlab_vega'],
-    author               = "Brian E. Granger / Jake VanderPlas",
-    author_email         = "ellisonbg@gmail.com / jakevdp@cs.washington.edu",
+    author               = 'Grant Nestor',
+    author_email         = 'grantnestor@gmail.com',
+    keywords             = ['jupyter', 'jupyterlab', 'labextension', 'notebook', 'nbextension'],
     include_package_data = True,
     install_requires = [
-        'jupyterlab>=0.4.2',
+        'jupyterlab>=0.11.0',
+        'ipython>=1.0.0'
     ]
 )
 
