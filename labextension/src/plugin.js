@@ -2,8 +2,8 @@ import { IRenderMime } from 'jupyterlab/lib/rendermime';
 import { IDocumentRegistry } from 'jupyterlab/lib/docregistry';
 import { toArray } from 'phosphor/lib/algorithm/iteration';
 import { findLastIndex } from 'phosphor/lib/algorithm/searching';
-import { OutputRenderer } from './output';
-import { DocWidgetFactory } from './doc';
+import { VegaOutput, VegaLiteOutput } from './output';
+import { VegaDoc, VegaLiteDoc } from './doc';
 import './index.css';
 
 /**
@@ -22,36 +22,47 @@ function activatePlugin(app, rendermime, registry) {
   /**
    * Add the renderer to the registry of renderers.
    */
-  rendermime.addRenderer('application/vnd.vega+json', new OutputRenderer(), index);
+  rendermime.addRenderer('application/vnd.vega+json', new VegaOutput(), index);
+  rendermime.addRenderer('application/vnd.vegalite+json', new VegaLiteOutput(), index);
   
-  if ('vg') {
-    /**
-     * Set the extensions associated with Vega.
-     */
-    const EXTENSIONS = ['.vg'];
-    const DEFAULT_EXTENSIONS = ['.vg'];
+  /**
+   * Set the extensions associated with Vega.
+   */
+  const VEGA_EXTENSIONS = ['.vg', 'vg.json', '.json'];
+  const VEGALITE_EXTENSIONS = ['.vl', 'vl.json', '.json'];
 
-    /**
-     * Add file handler for vg files.
-     */
-    let options = {
-      fileExtensions: EXTENSIONS,
-      defaultFor: DEFAULT_EXTENSIONS,
-      name: 'Vega',
-      displayName: 'Vega',
-      modelName: 'text',
-      preferKernel: false,
-      canStartKernel: false
-    };
+  /**
+   * Add file handler for vg files.
+   */
+  let options = {
+    fileExtensions: VEGA_EXTENSIONS,
+    defaultFor: VEGA_EXTENSIONS.slice(0,2),
+    name: 'Vega',
+    displayName: 'Vega',
+    modelName: 'text',
+    preferKernel: false,
+    canStartKernel: false
+  };
 
-    registry.addWidgetFactory(new DocWidgetFactory(options));
-  }
+  registry.addWidgetFactory(new VegaDoc(options));
+  
+  options = {
+    fileExtensions: VEGALITE_EXTENSIONS,
+    defaultFor: VEGALITE_EXTENSIONS.slice(0,2),
+    name: 'VegaLite',
+    displayName: 'VegaLite',
+    modelName: 'text',
+    preferKernel: false,
+    canStartKernel: false
+  };
+
+  registry.addWidgetFactory(new VegaLiteDoc(options));
 
 }
 
 const Plugin = {
   id: 'jupyter.extensions.Vega',
-  requires: 'vg' ? [IRenderMime, IDocumentRegistry] : [IRenderMime],
+  requires: [IRenderMime, IDocumentRegistry],
   activate: activatePlugin,
   autoStart: true
 };
