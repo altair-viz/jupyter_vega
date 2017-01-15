@@ -1,0 +1,17 @@
+/* 
+  Copyright (c) Jupyter Development Team.
+  Distributed under the terms of the Modified BSD License. 
+*/
+
+.jp-OutputWidgetVega, .jp-DocWidgetVega {
+  padding: 0;
+  overflow-y: scroll;
+}
+
+.jp-OutputWidgetVega {
+  
+}
+
+.jp-DocWidgetVega {
+  
+}
