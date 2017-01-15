@@ -2,7 +2,7 @@ import { Widget } from 'phosphor/lib/ui/widget';
 import { ABCWidgetFactory } from 'jupyterlab/lib/docregistry';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Vega from 'jupyterlab_vega_react';
+import { Vega, VegaLite } from 'jupyterlab_vega_react';
 
 /**
  * The class name added to this DocWidget.
@@ -45,8 +45,13 @@ export class DocWidget extends Widget {
     this.title.label = this._context.path.split('/').pop();
     if (this.isAttached) {
       let content = this._context.model.toString();
-      let json = content ? JSON.parse(content) : {};
-      ReactDOM.render(<Vega data={json} />, this.node);
+      const json = content ? JSON.parse(content) : {};
+      const mode = this._context.mode;
+      if (mode === 'vegalite') {
+        ReactDOM.render(<VegaLite data={json} />, this.node);
+      } else {
+        ReactDOM.render(<Vega data={json} />, this.node);
+      }
     }
   }
 
@@ -63,7 +68,7 @@ export class DocWidget extends Widget {
 /**
  * A widget factory for DocWidget.
  */
-export class DocWidgetFactory extends ABCWidgetFactory {
+export class VegaDoc extends ABCWidgetFactory {
 
   constructor(options) {
     super(options);
@@ -73,7 +78,33 @@ export class DocWidgetFactory extends ABCWidgetFactory {
    * Create a new widget given a context.
    */
   createNewWidget(context, kernel) {
-    let widget = new DocWidget(context);
+    let widget = new DocWidget({
+      ...context,
+      mode: 'vega'
+    });
+    this.widgetCreated.emit(widget);
+    return widget;
+  }
+
+}
+
+/**
+ * A widget factory for DocWidget.
+ */
+export class VegaLiteDoc extends ABCWidgetFactory {
+
+  constructor(options) {
+    super(options);
+  }
+  
+  /**
+   * Create a new widget given a context.
+   */
+  createNewWidget(context, kernel) {
+    let widget = new DocWidget({
+      ...context,
+      mode: 'vegalite'
+    });
     this.widgetCreated.emit(widget);
     return widget;
   }
