@@ -1,8 +1,8 @@
 # jupyterlab_vega
 
-A JupyterLab and Jupyter Notebook extension for rendering Vega and VegaLite
+A JupyterLab and Jupyter Notebook extension for rendering Vega and Vega-lite
 
-![output renderer](http://g.recordit.co/QAsC7YULcY.gif)
+![output renderer](http://g.recordit.co/d9dWoMUUA3.gif)
 
 ## Prerequisites
 
@@ -48,7 +48,7 @@ Vega({
             "type": "linear",
             "range": "height",
             "domain": {"data": "table", "field": "y"},
-            "nice": true
+            "nice": True
         }
     ],
     "axes": [
@@ -62,7 +62,7 @@ Vega({
             "properties": {
                 "enter": {
                     "x": {"scale": "x", "field": "x"},
-                    "width": {"scale": "x", "band": true, "offset": -1},
+                    "width": {"scale": "x", "band": True, "offset": -1},
                     "y": {"scale": "y", "field": "y"},
                     "y2": {"scale": "y", "value": 0}
                 },
@@ -78,7 +78,28 @@ Vega({
 })
 ```
 
-Using Altair:
+Or Vega-lite:
+
+```python
+from jupyterlab_vega import VegaLite
+
+VegaLite({
+    "data": {
+        "values": [
+            {"a": "A", "b": 28}, {"a": "B", "b": 55}, {"a": "C", "b": 43},
+            {"a": "D", "b": 91}, {"a": "E", "b": 81}, {"a": "F", "b": 53},
+            {"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}
+        ]
+    },
+    "mark": "bar",
+    "encoding": {
+        "x": {"field": "a", "type": "ordinal"},
+        "y": {"field": "b", "type": "quantitative"}
+    }
+})
+```
+
+<!-- Using Altair:
 
 ```python
 import altair
@@ -89,11 +110,11 @@ altair.Chart(cars).mark_point().encode(
     y='Miles_per_Gallon',
     color='Origin',
 )
-```
+``` -->
 
 To render a `.vg` or `.vl` (`.vg.json` and `.vl.json` are also supported) file as a tree, simply open it:
 
-![file renderer](http://g.recordit.co/cbf0xnQHKn.gif)
+![file renderer](http://g.recordit.co/z5LF4W28nv.gif)
 
 ## Install
 

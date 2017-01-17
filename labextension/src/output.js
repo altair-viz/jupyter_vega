@@ -8,17 +8,16 @@ import { Vega, VegaLite } from 'jupyterlab_vega_react';
  */
 const CLASS_NAME = 'jp-OutputWidgetVega';
 
-
 /**
  * A widget for rendering Vega.
  */
-export class OutputWidget extends Widget {
+class OutputWidget extends Widget {
 
   constructor(options) {
     super();
     this.addClass(CLASS_NAME);
     this._source = options.source;
-    this._mode = options.mode;
+    this._mimetype = options.mimetype;
   }
 
   /**
@@ -40,16 +39,14 @@ export class OutputWidget extends Widget {
    */
   _render() {
     const json = this._source;
-    const mode = this._mode;
-    if (mode === 'vegalite') {
-      ReactDOM.render(<VegaLite data={json} />, this.node);
-    } else {
-      ReactDOM.render(<Vega data={json} />, this.node);
-    }
+    const mimetype = this._mimetype;
+    ReactDOM.render(
+      mimetype === 'application/vnd.vegalite+json' ? <VegaLite data={json} /> : <Vega data={json} />,
+      this.node
+    );
   }
 
 }
-
 
 export class VegaOutput {
 
@@ -76,10 +73,7 @@ export class VegaOutput {
    * Render the transformed mime bundle.
    */
   render(options) {
-    return new OutputWidget({
-      ...options,
-      mode: 'vega'
-    });
+    return new OutputWidget(options);
   }
 
 }
@@ -109,10 +103,7 @@ export class VegaLiteOutput {
    * Render the transformed mime bundle.
    */
   render(options) {
-    return new OutputWidget({
-      ...options,
-      mode: 'vegalite'
-    });
+    return new OutputWidget(options);
   }
 
 }

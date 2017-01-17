@@ -31,3 +31,11 @@ def Vega(data):
         'text/plain': '<jupyterlab_vega.Vega object>'
     }
     display(bundle, raw=True)
+
+def VegaLite(data):
+    bundle = {
+        'application/vnd.vegalite+json': data,
+        'application/json': data,
+        'text/plain': '<jupyterlab_vega.VegaLite object>'
+    }
+    display(bundle, raw=True)
