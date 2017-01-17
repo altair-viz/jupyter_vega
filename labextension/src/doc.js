@@ -9,12 +9,11 @@ import { Vega, VegaLite } from 'jupyterlab_vega_react';
  */
 const CLASS_NAME = 'jp-DocWidgetVega';
 
-
 /**
  * A widget for rendering jupyterlab_vega files.
  */
-export class DocWidget extends Widget {
-
+class DocWidget extends Widget {
+  
   constructor(context) {
     super();
     this._context = context;
@@ -46,12 +45,11 @@ export class DocWidget extends Widget {
     if (this.isAttached) {
       let content = this._context.model.toString();
       const json = content ? JSON.parse(content) : {};
-      const mode = this._context.mode;
-      if (mode === 'vegalite') {
-        ReactDOM.render(<VegaLite data={json} />, this.node);
-      } else {
-        ReactDOM.render(<Vega data={json} />, this.node);
-      }
+      const path = this._context._path;
+      ReactDOM.render(
+        path.includes('.vl') ? <VegaLite data={json} /> : <Vega data={json} />,
+        this.node
+      );
     }
   }
 
@@ -61,52 +59,25 @@ export class DocWidget extends Widget {
   onAfterAttach(msg) {
     this.update();
   }
-
+  
 }
-
 
 /**
  * A widget factory for DocWidget.
  */
 export class VegaDoc extends ABCWidgetFactory {
-
+  
   constructor(options) {
     super(options);
   }
-  
+
   /**
    * Create a new widget given a context.
    */
   createNewWidget(context, kernel) {
-    let widget = new DocWidget({
-      ...context,
-      mode: 'vega'
-    });
+    let widget = new DocWidget(context);
     this.widgetCreated.emit(widget);
     return widget;
-  }
-
-}
-
-/**
- * A widget factory for DocWidget.
- */
-export class VegaLiteDoc extends ABCWidgetFactory {
-
-  constructor(options) {
-    super(options);
   }
   
-  /**
-   * Create a new widget given a context.
-   */
-  createNewWidget(context, kernel) {
-    let widget = new DocWidget({
-      ...context,
-      mode: 'vegalite'
-    });
-    this.widgetCreated.emit(widget);
-    return widget;
-  }
-
 }

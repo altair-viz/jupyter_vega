@@ -10,10 +10,11 @@ const CLASS_NAME = 'output_Vega rendered_html';
 //
 // Render data to the output area
 // 
-function renderVega(data, node) {
+function render_vega(data, node) {
   ReactDOM.render(<Vega data={data} />, node);
 }
-function renderVegaLite(data, node) {
+
+function render_vegalite(data, node) {
   ReactDOM.render(<VegaLite data={data} />, node);
 }
 
@@ -24,18 +25,20 @@ export function register_renderer($) {
   // Get an instance of the OutputArea object from the first CodeCellebook_
   const OutputArea = $('#notebook-container').find('.code_cell').eq(0).data('cell').output_area;
   // A function to render output of 'application/vnd.vega+json' mime type
-  function append_mime(type, json, md, element) {
-    const toinsert = this.create_output_subarea(md, CLASS_NAME, type);
+  function append_vega(json, md, element) {
+    const toinsert = this.create_output_subarea(md, CLASS_NAME, VEGA_MIME_TYPE);
     this.keyboard_manager.register_events(toinsert);
-    render(json, toinsert[0]);
+    render_vega(json, toinsert[0]);
     element.append(toinsert);
     return toinsert;
   };
-  function append_vega(json, md, element) {
-    return append_mime(VEGA_MIME_TYPE, json, md);
-  };
+  // A function to render output of 'application/vnd.vegalite+json' mime type
   function append_vegalite(json, md, element) {
-    return append_mime(VEGALITE_MIME_TYPE, json, md, element);
+    const toinsert = this.create_output_subarea(md, CLASS_NAME, VEGALITE_MIME_TYPE);
+    this.keyboard_manager.register_events(toinsert);
+    render_vegalite(json, toinsert[0]);
+    element.append(toinsert);
+    return toinsert;
   };
   // Calculate the index of this renderer in `OutputArea.display_order`
   // e.g. Insert this renderer after any renderers with mime type that matches "+json"
@@ -67,7 +70,7 @@ export function render_cells($) {
   $('#notebook-container').find('.cell').toArray().forEach(item => {
     const CodeCell = $(item).data('cell');
     // If a cell has output data of 'application/vnd.vega+json' mime type
-    if (CodeCell.output_area && CodeCell.output_area.outputs.find(output => output.data[VEGA_MIME_TYPE] || output.data[VEGALITE_MIME_TYPE])) {
+    if (CodeCell.output_area && CodeCell.output_area.outputs.find(output => output.data && (output.data[VEGA_MIME_TYPE] || output.data[VEGALITE_MIME_TYPE]))) {
       // Re-render the cell by executing it
       CodeCell.notebook.render_cell_output(CodeCell);
     }

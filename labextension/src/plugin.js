@@ -3,7 +3,7 @@ import { IDocumentRegistry } from 'jupyterlab/lib/docregistry';
 import { toArray } from 'phosphor/lib/algorithm/iteration';
 import { findLastIndex } from 'phosphor/lib/algorithm/searching';
 import { VegaOutput, VegaLiteOutput } from './output';
-import { VegaDoc, VegaLiteDoc } from './doc';
+import { VegaDoc } from './doc';
 import './index.css';
 
 /**
@@ -34,7 +34,8 @@ function activatePlugin(app, rendermime, registry) {
   /**
    * Add file handler for vg files.
    */
-  let options = {
+
+  registry.addWidgetFactory(new VegaDoc({
     fileExtensions: VEGA_EXTENSIONS,
     defaultFor: VEGA_EXTENSIONS.slice(0,2),
     name: 'Vega',
@@ -42,11 +43,9 @@ function activatePlugin(app, rendermime, registry) {
     modelName: 'text',
     preferKernel: false,
     canStartKernel: false
-  };
-
-  registry.addWidgetFactory(new VegaDoc(options));
+  }));
   
-  options = {
+  registry.addWidgetFactory(new VegaDoc({
     fileExtensions: VEGALITE_EXTENSIONS,
     defaultFor: VEGALITE_EXTENSIONS.slice(0,2),
     name: 'VegaLite',
@@ -54,9 +53,7 @@ function activatePlugin(app, rendermime, registry) {
     modelName: 'text',
     preferKernel: false,
     canStartKernel: false
-  };
-
-  registry.addWidgetFactory(new VegaLiteDoc(options));
+  }));
 
 }
 

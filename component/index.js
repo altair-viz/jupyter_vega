@@ -1,67 +1,62 @@
 import React from 'react';
-import './index.css';
 import vegaEmbed from 'vega-embed';
+import './index.css';
 
 const DEFAULT_WIDTH = 500;
 const DEFAULT_HEIGHT = DEFAULT_WIDTH / 1.5;
 
-const defaultCallback = (): any => {};
+function defaultCallback() {
+  return {};
+}
 
 function embed(el, spec, mode, cb) {
-  const embedSpec = {
-    mode,
-    spec,
-  };
+  const embedSpec = { mode, spec };
   if (mode === 'vega-lite') {
     embedSpec.spec.config = {
       ...embedSpec.spec.config,
-      cell: {
-        width: DEFAULT_WIDTH,
-        height: DEFAULT_HEIGHT,
-      }
+      cell: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
     };
   }
   vegaEmbed(el, embedSpec, cb);
 }
 
-export class VegaEmbed extends React.Component {
-
+class VegaEmbed extends React.Component {
   static defaultProps = {
     renderedCallback: defaultCallback,
-    embedMode: 'vega-lite',
-  }
+    embedMode: 'vega-lite'
+  };
 
   componentDidMount() {
-    embed(this.el, this.props.data, this.props.embedMode, this.props.renderedCallback);
+    embed(
+      this.el,
+      this.props.data,
+      this.props.embedMode,
+      this.props.renderedCallback
+    );
   }
 
   shouldComponentUpdate(nextProps) {
     return this.props.data !== nextProps.data;
   }
 
-  componentDidUpdate(): void {
-    embed(this.el, this.props.data, this.props.embedMode, this.props.renderedCallback);
+  componentDidUpdate() {
+    embed(
+      this.el,
+      this.props.data,
+      this.props.embedMode,
+      this.props.renderedCallback
+    );
   }
 
   render() {
-    return (
-      <div>
-        <div 
-          ref={(el) => this.el = el} 
-        />
-      </div>
-    );
+    return <div ref={el => this.el = el} />;
   }
 }
 
 export function VegaLite(props) {
-  return (
-    <VegaEmbed data={props.data} embedMode="vega-lite" />
-  );
+  return <VegaEmbed data={props.data} embedMode="vega-lite" />;
 }
 
 export function Vega(props) {
-  return (
-    <VegaEmbed data={props.data} embedMode="vega" />
-  );
+  return <VegaEmbed data={props.data} embedMode="vega" />;
 }
