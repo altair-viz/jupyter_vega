@@ -1,3 +1,5 @@
 graft jupyterlab_vega/static
-graft src
-include package.json
+graft labextension/src
+graft nbextension/src
+include labextension/package.json
+include nbextension/package.json
