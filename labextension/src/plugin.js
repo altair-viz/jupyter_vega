@@ -22,8 +22,8 @@ function activatePlugin(app, rendermime, registry) {
   /**
    * Add the renderer to the registry of renderers.
    */
-  rendermime.addRenderer('application/vnd.vega+json', new VegaOutput(), index);
-  rendermime.addRenderer('application/vnd.vegalite+json', new VegaLiteOutput(), index);
+  rendermime.addRenderer('application/vnd.vega.v2+json', new VegaOutput(), index);
+  rendermime.addRenderer('application/vnd.vegalite.v1+json', new VegaLiteOutput(), index);
   
   /**
    * Set the extensions associated with Vega.
