@@ -1,5 +1,4 @@
 from IPython.display import display
-from .utils import prepare_spec
 
 
 # Running `npm run build` will create static resources in the static
@@ -33,8 +32,7 @@ def Vega(data):
     }
     display(bundle, raw=True)
 
-def VegaLite(spec, data):
-    data = prepare_spec(spec, data)
+def VegaLite(data):
     bundle = {
         'application/vnd.vegalite.v1+json': data,
         'application/json': data,
