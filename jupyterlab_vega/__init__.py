@@ -1,4 +1,4 @@
-from IPython.display import display
+from IPython.display import display, JSON
 from .utils import prepare_spec
 import json
 
@@ -26,13 +26,24 @@ def _jupyter_nbextension_paths():
 #   from jupyterlab_vega import Vega
 #   Vega(data)
 
-def Vega(data):
-    bundle = {
-        'application/vnd.vega.v2+json': data,
-        'application/json': data,
-        'text/plain': '<jupyterlab_vega.Vega object>'
-    }
-    display(bundle, raw=True)
+class Vega(JSON):
+
+    @property
+    def data(self):
+        return self._data
+    
+    @data.setter
+    def data(self, data):
+        if isinstance(data, str):
+            data = json.loads(data)
+        self._data = data
+
+    def _ipython_display_(self):
+        bundle = {
+            'application/vnd.vega.v2+json': self.data,
+            'text/plain': '<jupyterlab_geojson.GeoJSON object>'
+        }
+        display(bundle, raw=True)
 
 def VegaLite(spec, data):
     data = prepare_spec(spec, data)
