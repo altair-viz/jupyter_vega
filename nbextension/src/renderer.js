@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Vega, VegaLite } from 'jupyterlab_vega_react';
 import './index.css';
 
-const VEGA_MIME_TYPE = 'application/vnd.vega+json';
-const VEGALITE_MIME_TYPE = 'application/vnd.vegalite+json';
+const VEGA_MIME_TYPE = 'application/vnd.vega.v2+json';
+const VEGALITE_MIME_TYPE = 'application/vnd.vegalite.v1+json';
 const CLASS_NAME = 'output_Vega rendered_html';
 
 //
@@ -63,7 +63,7 @@ export function register_renderer($) {
 }
 
 //
-// Re-render cells with output data of 'application/vnd.vega+json' mime type
+// Re-render cells with output data of 'application/vnd.vega.v2+json' mime type
 // 
 export function render_cells($) {
   // Get all cells in notebook

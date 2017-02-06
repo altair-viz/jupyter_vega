@@ -53,7 +53,7 @@ export class VegaOutput {
   /**
    * The mime types this OutputRenderer accepts.
    */
-  mimetypes = ['application/vnd.vega+json'];
+  mimetypes = [ 'application/vnd.vega.v2+json' ];
 
   /**
    * Whether the input can safely sanitized for a given mime type.
@@ -83,7 +83,7 @@ export class VegaLiteOutput {
   /**
    * The mime types this OutputRenderer accepts.
    */
-  mimetypes = ['application/vnd.vegalite+json'];
+  mimetypes = [ 'application/vnd.vegalite.v1+json' ];
 
   /**
    * Whether the input can safely sanitized for a given mime type.
