@@ -1,6 +1,6 @@
 {
   "name": "jupyterlab_vega_nbextension",
-  "version": "0.0.1",
+  "version": "0.15.0",
   "description": "A Jupyter Notebook extension for rendering Vega",
   "author": "Grant Nestor <grantnestor@gmail.com>",
   "main": "lib/index.js",
