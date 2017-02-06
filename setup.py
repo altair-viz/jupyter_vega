@@ -29,8 +29,9 @@ setup_args = dict(
     keywords             = ['jupyter', 'jupyterlab', 'labextension', 'notebook', 'nbextension'],
     include_package_data = True,
     install_requires = [
-        'jupyterlab>=0.11.0',
-        'ipython>=1.0.0'
+        'jupyterlab>=0.15.0',
+        'ipython>=1.0.0',
+        'pandas'
     ]
 )
 
