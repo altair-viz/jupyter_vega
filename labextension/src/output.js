@@ -1,7 +1,7 @@
 import { Widget } from 'phosphor/lib/ui/widget';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Vega, VegaLite } from 'jupyterlab_vega_react';
+import Vega from 'jupyterlab_vega_react';
 
 /**
  * The class name added to this OutputWidget.
@@ -40,10 +40,14 @@ class OutputWidget extends Widget {
   _render() {
     const json = this._source;
     const mimetype = this._mimetype;
-    ReactDOM.render(
-      mimetype === 'application/vnd.vegalite+json' ? <VegaLite data={json} /> : <Vega data={json} />,
-      this.node
-    );
+    const props = {
+      data: json,
+      embedMode: mimetype === 'application/vnd.vegalite.v1+json' ? 'vega-lite' : 'vega',
+      renderedCallback: (error, result) => {
+        if (error) return console.log(error);
+      }
+    };
+    ReactDOM.render(<Vega {...props} />, this.node);
   }
 
 }

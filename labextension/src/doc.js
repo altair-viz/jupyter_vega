@@ -2,7 +2,7 @@ import { Widget } from 'phosphor/lib/ui/widget';
 import { ABCWidgetFactory } from 'jupyterlab/lib/docregistry';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Vega, VegaLite } from 'jupyterlab_vega_react';
+import Vega from 'jupyterlab_vega_react';
 
 /**
  * The class name added to this DocWidget.
@@ -46,10 +46,11 @@ class DocWidget extends Widget {
       let content = this._context.model.toString();
       const json = content ? JSON.parse(content) : {};
       const path = this._context._path;
-      ReactDOM.render(
-        path.includes('.vl') ? <VegaLite data={json} /> : <Vega data={json} />,
-        this.node
-      );
+      const props = {
+        data: json,
+        embedMode: path.includes('.vl') ? 'vega-lite' : 'vega'
+      };
+      ReactDOM.render(<Vega {...props} />, this.node);
     }
   }
 
