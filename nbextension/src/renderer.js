@@ -31,6 +31,11 @@ export function register_renderer($) {
         embedMode,
         renderedCallback: (error, result) => {
           if (error) return console.log(error);
+          // Add a static image output to mime bundle
+          const imageData = result.view.toImageURL().split(',')[1];
+          // Waiting on https://github.com/jupyterlab/jupyterlab/issues/1603
+          // if (!this._injector.has('image/png')) this._injector.add('image/png', imageData);
+          this._injector('image/png', imageData);
         }
       };
       render(props, toinsert[(0)]);
