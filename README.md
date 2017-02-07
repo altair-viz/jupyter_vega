@@ -6,7 +6,7 @@ A JupyterLab and Jupyter Notebook extension for rendering Vega and Vega-lite
 
 ## Prerequisites
 
-* JupyterLab >=0.11.0 and/or Notebook >=4.3
+* JupyterLab ^0.15.0 and/or Notebook >=4.3.0
 
 ## Usage
 
@@ -83,23 +83,40 @@ Or Vega-lite:
 ```python
 from jupyterlab_vega import VegaLite
 
-VegaLite({
-    "data": {
-        "values": [
-            {"a": "A", "b": 28}, {"a": "B", "b": 55}, {"a": "C", "b": 43},
-            {"a": "D", "b": 91}, {"a": "E", "b": 81}, {"a": "F", "b": 53},
-            {"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}
-        ]
-    },
+spec = {
     "mark": "bar",
     "encoding": {
         "x": {"field": "a", "type": "ordinal"},
         "y": {"field": "b", "type": "quantitative"}
     }
-})
+}
+data = [
+    {"a": "A", "b": 28}, {"a": "B", "b": 55}, {"a": "C", "b": 43},
+    {"a": "D", "b": 91}, {"a": "E", "b": 81}, {"a": "F", "b": 53},
+    {"a": "G", "b": 19}, {"a": "H", "b": 87}, {"a": "I", "b": 52}
+]
+
+VegaLite(spec, data)
 ```
 
-<!-- Using Altair:
+Using a pandas DataFrame:
+
+```python
+from jupyterlab_vega import VegaLite
+import pandas as pd
+
+df = pd.reada_json('cars.json')
+
+VegaLite({
+  "mark": "point",
+  "encoding": {
+    "y": {"type": "quantitative","field": "Acceleration"},
+    "x": {"type": "quantitative","field": "Horsepower"}
+  }
+}, df)
+```
+
+Using Altair:
 
 ```python
 import altair
@@ -110,7 +127,7 @@ altair.Chart(cars).mark_point().encode(
     y='Miles_per_Gallon',
     color='Origin',
 )
-``` -->
+```
 
 To render a `.vg` or `.vl` (`.vg.json` and `.vl.json` are also supported) file as a tree, simply open it:
 

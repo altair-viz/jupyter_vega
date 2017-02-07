@@ -1,4 +1,6 @@
 from IPython.display import display
+from .utils import prepare_spec
+import json
 
 
 # Running `npm run build` will create static resources in the static
@@ -26,16 +28,17 @@ def _jupyter_nbextension_paths():
 
 def Vega(data):
     bundle = {
-        'application/vnd.vega+json': data,
+        'application/vnd.vega.v2+json': data,
         'application/json': data,
         'text/plain': '<jupyterlab_vega.Vega object>'
     }
     display(bundle, raw=True)
 
-def VegaLite(data):
+def VegaLite(spec, data):
+    data = prepare_spec(spec, data)
     bundle = {
-        'application/vnd.vegalite+json': data,
+        'application/vnd.vegalite.v1+json': data,
         'application/json': data,
-        'text/plain': '<jupyterlab_vega.VegaLite object>'
+        'text/plain': json.dumps(data, indent=4)
     }
     display(bundle, raw=True)

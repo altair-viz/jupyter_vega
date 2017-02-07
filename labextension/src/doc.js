@@ -1,13 +1,19 @@
 import { Widget } from 'phosphor/lib/ui/widget';
 import { ABCWidgetFactory } from 'jupyterlab/lib/docregistry';
+import { ActivityMonitor } from 'jupyterlab/lib/common/activitymonitor';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Vega, VegaLite } from 'jupyterlab_vega_react';
+import Vega from 'jupyterlab_vega_react';
 
 /**
  * The class name added to this DocWidget.
  */
 const CLASS_NAME = 'jp-DocWidgetVega';
+
+/**
+ * The timeout to wait for change activity to have ceased before rendering.
+ */
+const RENDER_TIMEOUT = 1000;
 
 /**
  * A widget for rendering jupyterlab_vega files.
@@ -24,6 +30,11 @@ class DocWidget extends Widget {
     context.pathChanged.connect(() => {
       this.update();
     });
+    this._monitor = new ActivityMonitor({
+      signal: context.model.contentChanged,
+      timeout: RENDER_TIMEOUT
+    });
+    this._monitor.activityStopped.connect(this.update, this);
   }
 
   /**
@@ -33,6 +44,7 @@ class DocWidget extends Widget {
     if (!this.isDisposed) {
       this._context = null;
       ReactDOM.unmountComponentAtNode(this.node);
+      this._monitor.dispose();
       super.dispose();
     }
   }
@@ -46,10 +58,11 @@ class DocWidget extends Widget {
       let content = this._context.model.toString();
       const json = content ? JSON.parse(content) : {};
       const path = this._context._path;
-      ReactDOM.render(
-        path.includes('.vl') ? <VegaLite data={json} /> : <Vega data={json} />,
-        this.node
-      );
+      const props = {
+        data: json,
+        embedMode: path.includes('.vl') ? 'vega-lite' : 'vega'
+      };
+      ReactDOM.render(<Vega {...props} />, this.node);
     }
   }
 

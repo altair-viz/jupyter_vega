@@ -5,29 +5,15 @@ import './index.css';
 const DEFAULT_WIDTH = 500;
 const DEFAULT_HEIGHT = DEFAULT_WIDTH / 1.5;
 
-function defaultCallback() {
-  return {};
-}
-
-function embed(el, spec, mode, cb) {
-  const embedSpec = { mode, spec };
-  if (mode === 'vega-lite') {
-    embedSpec.spec.config = {
-      ...embedSpec.spec.config,
-      cell: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
-    };
-  }
-  vegaEmbed(el, embedSpec, cb);
-}
-
-class VegaEmbed extends React.Component {
+export default class Vega extends React.Component {
+  
   static defaultProps = {
-    renderedCallback: defaultCallback,
+    renderedCallback: () => ({}),
     embedMode: 'vega-lite'
   };
 
   componentDidMount() {
-    embed(
+    this.embed(
       this.el,
       this.props.data,
       this.props.embedMode,
@@ -40,7 +26,7 @@ class VegaEmbed extends React.Component {
   }
 
   componentDidUpdate() {
-    embed(
+    this.embed(
       this.el,
       this.props.data,
       this.props.embedMode,
@@ -51,12 +37,18 @@ class VegaEmbed extends React.Component {
   render() {
     return <div ref={el => this.el = el} />;
   }
-}
-
-export function VegaLite(props) {
-  return <VegaEmbed data={props.data} embedMode="vega-lite" />;
-}
-
-export function Vega(props) {
-  return <VegaEmbed data={props.data} embedMode="vega" />;
+  
+  embed = (el, spec, mode, cb) => {
+    const embedSpec = { mode, spec };
+    const width = DEFAULT_WIDTH;
+    const height = DEFAULT_HEIGHT;
+    if (mode === 'vega-lite') {
+      embedSpec.spec.config = {
+        ...embedSpec.spec.config,
+        cell: { width, height }
+      };
+    }
+    vegaEmbed(el, embedSpec, cb);
+  }
+  
 }
