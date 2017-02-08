@@ -33,9 +33,7 @@ export function register_renderer($) {
           if (error) return console.log(error);
           // Add a static image output to mime bundle
           const imageData = result.view.toImageURL().split(',')[1];
-          // Waiting on https://github.com/jupyterlab/jupyterlab/issues/1603
-          // if (!this._injector.has('image/png')) this._injector.add('image/png', imageData);
-          this._injector('image/png', imageData);
+          
         }
       };
       render(props, toinsert[(0)]);
@@ -51,13 +49,13 @@ export function register_renderer($) {
   // ...or just insert it at the top
   const index = 0;
   // Register the mime type and append_mime_type function with the notebook's OutputArea
-  OutputArea.register_mime_type(VEGA_MIME_TYPE, append_vega, {
+  OutputArea.register_mime_type(VEGA_MIME_TYPE, append_mime(VEGA_MIME_TYPE), {
     // Is output safe?
     safe: true,
     // Index of renderer in `OutputArea.display_order`
     index: index
   });
-  OutputArea.register_mime_type(VEGALITE_MIME_TYPE, append_vegalite, {
+  OutputArea.register_mime_type(VEGALITE_MIME_TYPE, append_mime(VEGALITE_MIME_TYPE), {
     // Is output safe?
     safe: true,
     // Index of renderer in `OutputArea.display_order`
