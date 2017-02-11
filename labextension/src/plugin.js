@@ -28,8 +28,8 @@ function activatePlugin(app, rendermime, registry) {
   /**
    * Set the extensions associated with Vega.
    */
-  const VEGA_EXTENSIONS = ['.vg', '.vg.json'];
-  const VEGALITE_EXTENSIONS = ['.vl', '.vl.json'];
+  const VEGA_EXTENSIONS = ['.vg', '.vg.json', '.json'];
+  const VEGALITE_EXTENSIONS = ['.vl', '.vl.json', '.json'];
 
   /**
    * Add file handler for vg files.
@@ -47,7 +47,7 @@ function activatePlugin(app, rendermime, registry) {
   
   registry.addWidgetFactory(new VegaDoc({
     fileExtensions: VEGALITE_EXTENSIONS,
-    defaultFor: VEGALITE_EXTENSIONS,
+    defaultFor: VEGALITE_EXTENSIONS.slice(0,2),
     name: 'VegaLite',
     displayName: 'VegaLite',
     modelName: 'text',
