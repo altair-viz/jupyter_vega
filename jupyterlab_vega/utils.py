@@ -2,6 +2,7 @@ import cgi
 import codecs
 import collections
 import os.path
+import pandas as pd
 
 
 def nested_update(d, u):
@@ -71,7 +72,26 @@ def sanitize_dataframe(df):
     return df
 
 
-def prepare_spec(spec, data=None):
+def prepare_vega_spec(spec, data=None):
+    """Prepare a Vega spec for sending to the frontend.
+
+    This allows data to be passed in either as part of the spec
+    or separately. If separately, the data is assumed to be a
+    pandas DataFrame or object that can be converted to to a DataFrame.
+
+    Note that if data is not None, this modifies spec in-place
+    """
+
+    if isinstance(data, dict):
+        spec['data'] = []
+        # We have to do the isinstance test first because we can't
+        # compare a DataFrame to None.
+        for key, value in data.items():
+            data = sanitize_dataframe(value)
+            spec['data'].append({'name': key, 'values': data.to_dict(orient='records')})
+    return spec
+    
+def prepare_vegalite_spec(spec, data=None):
     """Prepare a Vega-Lite spec for sending to the frontend.
 
     This allows data to be passed in either as part of the spec
@@ -80,7 +100,6 @@ def prepare_spec(spec, data=None):
 
     Note that if data is not None, this modifies spec in-place
     """
-    import pandas as pd
 
     if isinstance(data, pd.DataFrame):
         # We have to do the isinstance test first because we can't
