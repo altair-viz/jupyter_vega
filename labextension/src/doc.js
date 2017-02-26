@@ -3,7 +3,7 @@ import { ABCWidgetFactory } from 'jupyterlab/lib/docregistry';
 import { ActivityMonitor } from 'jupyterlab/lib/common/activitymonitor';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import VegaComponent from 'jupyterlab_vega_react';
+import Vega from 'jupyterlab_vega_react';
 
 /**
  * The class name added to a DocWidget.
@@ -57,12 +57,13 @@ export class DocWidget extends Widget {
       const content = this._context.model.toString();
       try {
         const data = JSON.parse(content);
-        ReactDOM.render(
-          <VegaComponent data={data} />,
-          this.node
-        );
+        const path = this._context._path;
+        const props = {
+          data,
+          embedMode: path.includes('.vl') ? 'vega-lite' : 'vega'
+        };
+        ReactDOM.render(<Vega {...props} />, this.node);
       } catch (error) {
-        
         const ErrorDisplay = props => (
           <div
             className="jp-RenderedText jp-mod-error"
@@ -112,7 +113,7 @@ export class DocWidget extends Widget {
 /**
  * A widget factory for DocWidget.
  */
-export class DocWidgetFactory extends ABCWidgetFactory {
+export class VegaDoc extends ABCWidgetFactory {
   constructor(options) {
     super(options);
   }
