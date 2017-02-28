@@ -136,7 +136,10 @@ class Vega():
             'application/vnd.vega.v2+json': prepare_vega_spec(self.spec, self.data),
             'text/plain': '<jupyterlab_vega.Vega object>'
         }
-        display(bundle, raw=True) 
+        metadata = {
+            'application/vnd.vega.v2+json': self.metadata
+        }
+        display(bundle, metadata=metadata, raw=True) 
         
 
 class VegaLite(Vega):
@@ -179,4 +182,7 @@ class VegaLite(Vega):
             'application/vnd.vegalite.v1+json': prepare_vegalite_spec(self.spec, self.data),
             'text/plain': '<jupyterlab_vega.VegaLite object>'
         }
-        display(bundle, raw=True)
+        metadata = {
+            'application/vnd.vegalite.v1+json': self.metadata
+        }
+        display(bundle, metadata=metadata, raw=True)
