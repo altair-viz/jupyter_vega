@@ -1,4 +1,4 @@
-from IPython.display import display, DisplayObject
+from IPython.display import display
 import pandas as pd
 import os
 import json
@@ -28,7 +28,9 @@ def _safe_exists(path):
         
 
 class Vega():
-    """Vega expects a spec (a JSON-able dict) and data (dict) argument
+    """A display class for displaying Vega visualizations in the Jupyter Notebook and IPython kernel.
+    
+    Vega expects a spec (a JSON-able dict) and data (dict) argument
 
     not already-serialized JSON strings.
 
@@ -143,7 +145,7 @@ class Vega():
         
 
 class VegaLite(Vega):
-    """VegaLite expects a spec (a JSON-able dict) and data (JSON-able list or pandas DataFrame) argument
+    """A display class for displaying Vega-lite visualizations in the Jupyter Notebook and IPython kernel.
 
     not already-serialized JSON strings.
 
