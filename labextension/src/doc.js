@@ -1,12 +1,12 @@
-import { Widget } from 'phosphor/lib/ui/widget';
+import { Widget } from '@phosphor/widgets';
 import { ABCWidgetFactory } from 'jupyterlab/lib/docregistry';
 import { ActivityMonitor } from 'jupyterlab/lib/common/activitymonitor';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Vega from 'jupyterlab_vega_react';
+import VegaComponent from 'jupyterlab_vega_react';
 
 /**
- * The class name added to this DocWidget.
+ * The class name added to a DocWidget.
  */
 const CLASS_NAME = 'jp-DocWidgetVega';
 
@@ -18,8 +18,7 @@ const RENDER_TIMEOUT = 1000;
 /**
  * A widget for rendering jupyterlab_vega files.
  */
-class DocWidget extends Widget {
-  
+export class DocWidget extends Widget {
   constructor(context) {
     super();
     this._context = context;
@@ -55,14 +54,50 @@ class DocWidget extends Widget {
   onUpdateRequest(msg) {
     this.title.label = this._context.path.split('/').pop();
     if (this.isAttached) {
-      let content = this._context.model.toString();
-      const json = content ? JSON.parse(content) : {};
-      const path = this._context._path;
-      const props = {
-        data: json,
-        embedMode: path.includes('.vl') ? 'vega-lite' : 'vega'
-      };
-      ReactDOM.render(<Vega {...props} />, this.node);
+      const content = this._context.model.toString();
+      try {
+        const data = JSON.parse(content);
+        ReactDOM.render(
+          <VegaComponent data={data} />,
+          this.node
+        );
+      } catch (error) {
+        
+        const ErrorDisplay = props => (
+          <div
+            className="jp-RenderedText jp-mod-error"
+            style={{
+              width: '100%',
+              minHeight: '100%',
+              textAlign: 'center',
+              padding: 10,
+              boxSizing: 'border-box'
+            }}
+          >
+            <span
+              style={{
+                fontSize: 18,
+                fontWeight: 500
+              }}
+            >{props.message}</span>
+            <pre
+              style={{
+                textAlign: 'left',
+                padding: 10,
+                overflow: 'hidden'
+              }}
+            >{props.content}</pre>
+          </div>
+        );
+        
+        ReactDOM.render(
+          <ErrorDisplay
+            message="Invalid JSON"
+            content={content}
+          />,
+          this.node
+        );
+      }
     }
   }
 
@@ -72,14 +107,12 @@ class DocWidget extends Widget {
   onAfterAttach(msg) {
     this.update();
   }
-  
 }
 
 /**
  * A widget factory for DocWidget.
  */
-export class VegaDoc extends ABCWidgetFactory {
-  
+export class DocWidgetFactory extends ABCWidgetFactory {
   constructor(options) {
     super(options);
   }
@@ -88,9 +121,8 @@ export class VegaDoc extends ABCWidgetFactory {
    * Create a new widget given a context.
    */
   createNewWidget(context, kernel) {
-    let widget = new DocWidget(context);
+    const widget = new DocWidget(context);
     this.widgetCreated.emit(widget);
     return widget;
   }
-  
 }
