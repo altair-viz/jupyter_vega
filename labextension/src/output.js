@@ -1,4 +1,4 @@
-import { Widget } from 'phosphor/lib/ui/widget';
+import { Widget } from '@phosphor/widgets';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Vega from 'jupyterlab_vega_react';
@@ -11,14 +11,13 @@ const CLASS_NAME = 'jp-OutputWidgetVega';
 /**
  * A widget for rendering Vega.
  */
-class OutputWidget extends Widget {
-
+export class OutputWidget extends Widget {
   constructor(options) {
     super();
     this.addClass(CLASS_NAME);
-    this._source = options.source;
-    this._mimetype = options.mimetype;
-    this._injector = options.injector;
+    this._data = options.model.data;
+    // this._metadata = options.model.metadata.get(options.mimeType);
+    this._mimeType = options.mimeType;
   }
 
   /**
@@ -39,42 +38,36 @@ class OutputWidget extends Widget {
    * A render function given the widget's DOM node.
    */
   _render() {
-    const json = this._source;
-    const mimetype = this._mimetype;
+    const data = this._data.get(this._mimeType);
+    // const metadata = this._metadata.get(this._mimeType);
     const props = {
-      data: json,
-      embedMode: mimetype === 'application/vnd.vegalite.v1+json' ? 'vega-lite' : 'vega',
+      data,
+      // metadata,
+      embedMode: this._mimeType === 'application/vnd.vegalite.v1+json'
+        ? 'vega-lite'
+        : 'vega',
       renderedCallback: (error, result) => {
         if (error) return console.log(error);
         // Add a static image output to mime bundle
         const imageData = result.view.toImageURL().split(',')[1];
-        if (!this._injector.has('image/png')) this._injector.add('image/png', imageData);
+        this._data.set('image/png', imageData)
       }
     };
     ReactDOM.render(<Vega {...props} />, this.node);
   }
-
 }
 
 export class VegaOutput {
-
   /**
    * The mime types this OutputRenderer accepts.
    */
-  mimetypes = [ 'application/vnd.vega.v2+json' ];
+  mimeTypes = ['application/vnd.vega.v2+json'];
 
   /**
-   * Whether the input can safely sanitized for a given mime type.
+   * Whether the renderer can render given the render options.
    */
-  isSanitizable(mimetype) {
-    return this.mimetypes.indexOf(mimetype) !== -1;
-  }
-
-  /**
-   * Whether the input is safe without sanitization.
-   */
-  isSafe(mimetype) {
-    return false;
+  canRender(options) {
+    return this.mimeTypes.indexOf(options.mimeType) !== -1;
   }
 
   /**
@@ -83,28 +76,19 @@ export class VegaOutput {
   render(options) {
     return new OutputWidget(options);
   }
-
 }
 
 export class VegaLiteOutput {
-
   /**
    * The mime types this OutputRenderer accepts.
    */
-  mimetypes = [ 'application/vnd.vegalite.v1+json' ];
+  mimeTypes = ['application/vnd.vegalite.v1+json'];
 
   /**
-   * Whether the input can safely sanitized for a given mime type.
+   * Whether the renderer can render given the render options.
    */
-  isSanitizable(mimetype) {
-    return this.mimetypes.indexOf(mimetype) !== -1;
-  }
-
-  /**
-   * Whether the input is safe without sanitization.
-   */
-  isSafe(mimetype) {
-    return false;
+  canRender(options) {
+    return this.mimeTypes.indexOf(options.mimeType) !== -1;
   }
 
   /**
@@ -113,5 +97,4 @@ export class VegaLiteOutput {
   render(options) {
     return new OutputWidget(options);
   }
-
 }

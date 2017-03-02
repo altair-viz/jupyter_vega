@@ -1,0 +1,7 @@
+default_context:
+    author_name: "Grant Nestor"
+    author_email: "grantnestor@gmail.com"
+    mime_type: "application/vnd.vega.v2+json"
+    file_extension: "vg"
+    mime_short_name: "Vega"
+    extension_name: "jupyterlab_vega"

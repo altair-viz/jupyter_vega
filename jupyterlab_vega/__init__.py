@@ -138,8 +138,48 @@ class Vega():
             'application/vnd.vega.v2+json': prepare_vega_spec(self.spec, self.data),
             'text/plain': '<jupyterlab_vega.Vega object>'
         }
-        metadata = {
-            'application/vnd.vega.v2+json': self.metadata
+        display(bundle, raw=True) 
+        
+
+class VegaLite(Vega):
+    """VegaLite expects a spec (a JSON-able dict) and data (JSON-able list or pandas DataFrame) argument
+
+    not already-serialized JSON strings.
+
+    Scalar types (None, number, string) are not allowed, only dict containers.
+    """
+    
+    def __init__(self, spec=None, data=None, url=None, filename=None, metadata=None):
+        """Create a VegaLite display object given raw data.
+
+        Parameters
+        ----------
+        spec : dict
+            VegaLite spec. Not an already-serialized JSON string.
+        data : dict or list
+            VegaLite data. Not an already-serialized JSON string.
+            Scalar types (None, number, string) are not allowed, only dict
+            or list containers.
+        url : unicode
+            A URL to download the data from.
+        filename : unicode
+            Path to a local file to load the data from.
+        metadata: dict
+            Specify extra metadata to attach to the json display object.
+        """
+        
+        super(VegaLite, self).__init__(spec=spec, data=data, url=url, filename=filename)
+
+    def _check_data(self):
+        if self.spec is not None and not isinstance(self.spec, dict):
+            raise TypeError("%s expects a JSONable dict, not %r" % (self.__class__.__name__, self.spec))
+        if self.data is not None and not isinstance(self.data, (list, pd.DataFrame)):
+            raise TypeError("%s expects a JSONable list or pandas DataFrame, not %r" % (self.__class__.__name__, self.data))
+                    
+    def _ipython_display_(self):
+        bundle = {
+            'application/vnd.vegalite.v1+json': prepare_vegalite_spec(self.spec, self.data),
+            'text/plain': '<jupyterlab_vega.VegaLite object>'
         }
         display(bundle, metadata=metadata, raw=True) 
         

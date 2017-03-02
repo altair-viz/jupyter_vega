@@ -4,9 +4,7 @@ A JupyterLab extension for rendering Vega
 
 ## Prerequisites
 
-* `jupyterlab@^0.16.0`
-
-![file renderer](http://g.recordit.co/cbf0xnQHKn.gif)
+* `jupyterlab@^0.17.0`
 
 ## Development
 

@@ -1,7 +1,6 @@
 import { IRenderMime } from 'jupyterlab/lib/rendermime';
 import { IDocumentRegistry } from 'jupyterlab/lib/docregistry';
-import { toArray } from 'phosphor/lib/algorithm/iteration';
-import { findLastIndex } from 'phosphor/lib/algorithm/searching';
+import { toArray, ArrayExt } from '@phosphor/algorithm';
 import { VegaOutput, VegaLiteOutput } from './output';
 import { VegaDoc } from './doc';
 import './index.css';
@@ -10,20 +9,34 @@ import './index.css';
  * Activate the extension.
  */
 function activatePlugin(app, rendermime, registry) {
-
   /**
    * Calculate the index of the renderer in the array renderers (e.g. Insert 
    * this renderer after any renderers with mime type that matches "+json") 
    * or simply pass an integer such as 0.
    */
-  // const index = findLastIndex(toArray(rendermime.mimetypes()), mimetype => mimetype.endsWith('+json')) + 1;
+  // const index = ArrayExt.findLastIndex(
+  //   toArray(rendermime.mimeTypes()),
+  //   mime => mime.endsWith('+json')
+  // ) + 1;
   const index = 0;
-  
+
   /**
    * Add the renderer to the registry of renderers.
    */
-  rendermime.addRenderer('application/vnd.vega.v2+json', new VegaOutput(), index);
-  rendermime.addRenderer('application/vnd.vegalite.v1+json', new VegaLiteOutput(), index);
+  rendermime.addRenderer(
+    {
+      mimeType: 'application/vnd.vega.v2+json',
+      renderer: new VegaOutput()
+    },
+    index
+  );
+  rendermime.addRenderer(
+    {
+      mimeType: 'application/vnd.vegalite.v1+json',
+      renderer: new VegaLiteOutput()
+    },
+    index
+  );
   
   /**
    * Set the extensions associated with Vega.
@@ -37,7 +50,7 @@ function activatePlugin(app, rendermime, registry) {
 
   registry.addWidgetFactory(new VegaDoc({
     fileExtensions: VEGA_EXTENSIONS,
-    defaultFor: VEGA_EXTENSIONS,
+    defaultFor: VEGA_EXTENSIONS.slice(0,2),
     name: 'Vega',
     displayName: 'Vega',
     modelName: 'text',
