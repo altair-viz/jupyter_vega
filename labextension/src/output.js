@@ -50,7 +50,7 @@ export class OutputWidget extends Widget {
         if (error) return console.log(error);
         // Add a static image output to mime bundle
         const imageData = result.view.toImageURL().split(',')[1];
-        this._data.set('image/png', imageData)
+        this._data.set('image/png', imageData);
       }
     };
     ReactDOM.render(<Vega {...props} />, this.node);

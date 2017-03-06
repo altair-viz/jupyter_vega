@@ -38,6 +38,11 @@ export function register_renderer(notebook) {
           if (error) return console.log(error);
           // Add a static image output to mime bundle
           const imageData = result.view.toImageURL().split(',')[1];
+          this.outputs
+            .filter(output => output.data[MIME_TYPE])
+            .forEach(output => {
+              output.data['image/png'] = imageData;
+            });
         }
       };
       render(props, toinsert[0]);
