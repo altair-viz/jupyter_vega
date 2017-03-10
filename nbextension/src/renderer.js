@@ -39,7 +39,7 @@ export function register_renderer(notebook) {
           // Add a static image output to mime bundle
           const imageData = result.view.toImageURL().split(',')[1];
           this.outputs
-            .filter(output => output.data[MIME_TYPE])
+            .filter(output => output.data[mimetype])
             .forEach(output => {
               output.data['image/png'] = imageData;
             });
