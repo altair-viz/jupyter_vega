@@ -4,3 +4,6 @@
 .vega-actions { 
   
 }
+.vega-actions a {
+  margin-right: 10px;
+}
