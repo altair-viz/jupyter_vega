@@ -13,12 +13,7 @@ export default class Vega extends React.Component {
   };
 
   componentDidMount() {
-    this.embed(
-      this.el,
-      this.props.data,
-      this.props.embedMode,
-      this.props.renderedCallback
-    );
+    this.embed();
   }
 
   shouldComponentUpdate(nextProps) {
@@ -26,29 +21,25 @@ export default class Vega extends React.Component {
   }
 
   componentDidUpdate() {
-    this.embed(
-      this.el,
-      this.props.data,
-      this.props.embedMode,
-      this.props.renderedCallback
-    );
+    this.embed();
   }
 
   render() {
     return <div ref={el => this.el = el} />;
   }
-  
-  embed = (el, spec, mode, cb) => {
-    const embedSpec = { mode, spec };
-    const width = DEFAULT_WIDTH;
-    const height = DEFAULT_HEIGHT;
-    if (mode === 'vega-lite') {
-      embedSpec.spec.config = {
-        ...embedSpec.spec.config,
-        cell: { width, height }
-      };
-    }
-    vegaEmbed(el, embedSpec, cb);
-  }
-  
+
+  embed = () => {
+    const { data: spec, embedMode: mode, renderedCallback: cb } = this.props;
+    const embedSpec = {
+      mode,
+      spec,
+      actions: true,
+      config: mode === 'vega-lite'
+        ? {
+            cell: { width: DEFAULT_WIDTH, height: DEFAULT_HEIGHT }
+          }
+        : {}
+    };
+    vegaEmbed(this.el, embedSpec, cb);
+  };
 }
