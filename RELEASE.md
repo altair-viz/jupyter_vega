@@ -6,12 +6,14 @@ This document guides an extension maintainer through creating and publishing a r
 
 Update the version number in `setup.py`, `labextension/package.json`, and `nbextension/package.json`.
 
+Commit your changes, add git tag for this version, and push both commit and tag to your origin/remote repo.
+
 ## Remove generated files
 
 Remove old Javascript bundle and Python package builds:
 
 ```bash
-rm -rf jupyterlab_vega/static
+git clean -xfd
 ```
 
 ## Build the package

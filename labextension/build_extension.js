@@ -38,10 +38,14 @@ buildExtension({
           test: /\.js$/,
           include: [
             path.join(__dirname, 'src'),
-            path.join(__dirname, 'node_modules', 'jupyterlab_vega_react')
+            path.join(
+              __dirname,
+              'node_modules',
+              'jupyterlab_vega_react'
+            )
           ],
           loader: 'babel-loader',
-          query: { presets: [ 'latest', 'stage-0', 'react' ] }
+          query: { presets: ['latest', 'stage-0', 'react'] }
         }
       ]
     }

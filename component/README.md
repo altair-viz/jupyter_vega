@@ -1,6 +1,6 @@
-# jupyterlab_vega
+# component
 
-The React component(s)
+A React component for rendering Vega
 
 ## Structure
 
