@@ -2,6 +2,8 @@
 
 A JupyterLab and Jupyter Notebook extension for rendering Vega and Vega-lite
 
+**This repository is no longer active; the vega/vega-lite extension now comes bundled with JupyterLab by default**
+
 ![output renderer](http://g.recordit.co/GNFg0zOrLh.gif)
 
 ## Prerequisites
